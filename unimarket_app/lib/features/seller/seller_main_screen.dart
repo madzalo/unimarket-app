@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:unimarket_app/features/order/presentation/screens/order_screen.dart';
 import 'package:unimarket_app/features/seller/seller_home_screen.dart';
+import 'package:unimarket_app/features/seller/seller_orders_screen.dart';
 
 class SellerMainScreen extends StatefulWidget {
   static const String routeName = '/seller-main-screen';
@@ -14,7 +14,7 @@ class SellerMainScreen extends StatefulWidget {
 class _SellerMainScreenState extends State<SellerMainScreen> {
   List<Widget> pageList = const [
     SellerHomeScreen(),
-    OrdersScreen(),
+    SellerOrdersScreen(),
   ];
 
   int _selectedIndex = 0;

@@ -11,8 +11,8 @@ import 'package:unimarket_app/features/auth/presentation/bloc/remote/auth_bloc.d
 import 'package:unimarket_app/features/auth/presentation/bloc/remote/auth_event.dart';
 import 'package:unimarket_app/features/auth/presentation/bloc/remote/auth_state.dart';
 import 'package:unimarket_app/features/auth/presentation/screens/register_screen.dart';
-import 'package:unimarket_app/features/home/home_screen.dart';
 import 'package:unimarket_app/features/home/main_screen.dart';
+import 'package:unimarket_app/features/seller/seller_main_screen.dart';
 import 'package:unimarket_app/injection_container.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -85,7 +85,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const HomeScreen()));
+                                                const SellerMainScreen()));
                                   });
                                 }
                               }

@@ -14,7 +14,10 @@ class _SellerHomeScreenState extends State<SellerHomeScreen> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text("Seller Home Screen"),
+        child: Text(
+          "Seller Home Screen",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

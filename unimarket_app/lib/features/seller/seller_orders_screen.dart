@@ -14,7 +14,10 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text("Seller Orders Screen"),
+        child: Text(
+          "Seller Orders Screen",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
