@@ -3,14 +3,21 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:unimarket_app/core/common/custom_elevated_button.dart';
+import 'package:unimarket_app/core/common/custom_text_form_field.dart';
+import 'package:unimarket_app/core/common/vertical_space.dart';
 import 'package:unimarket_app/features/auth/data/models/signin_model.dart';
 import 'package:unimarket_app/features/auth/presentation/bloc/remote/auth_bloc.dart';
 import 'package:unimarket_app/features/auth/presentation/bloc/remote/auth_event.dart';
 import 'package:unimarket_app/features/auth/presentation/bloc/remote/auth_state.dart';
-import 'package:unimarket_app/features/home/home.dart';
+import 'package:unimarket_app/features/auth/presentation/screens/register_screen.dart';
+import 'package:unimarket_app/features/home/home_screen.dart';
+import 'package:unimarket_app/features/home/main_screen.dart';
+import 'package:unimarket_app/injection_container.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
+  static const routeName = "/auth-screen";
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -25,77 +32,93 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text(''),
-        ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: email,
-                        decoration: const InputDecoration(labelText: "Email"),
-                      ),
-                      TextFormField(
-                        controller: password,
-                        decoration:
-                            const InputDecoration(labelText: "Password"),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      BlocBuilder<AuthBloc, AuthState>(
-                          builder: (context, state) {
-                        if (state is SignInLoadingDone) {
-                          String role = onNavigate(state.token!);
-                          if (role == 'CUSTOMER') {
-                            WidgetsBinding.instance
-                                .addPostFrameCallback((timeStamp) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Home()));
-                            });
-                          }
-                          if (role == 'SELLER') {
-                            WidgetsBinding.instance
-                                .addPostFrameCallback((timeStamp) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Home()));
-                            });
-                          }
-                        }
-                        if (state is SignInLoadingError) {
-                          print(state.error);
-                        }
-
-                        return ElevatedButton(
-                          onPressed: () {
-                            _onSignIn(
-                                context,
-                                SignInModel(
-                                    email: email.text,
-                                    password: password.text));
-                          },
-                          child: const Text("Login"),
-                        );
-                      })
-                    ],
-                  ))
-            ]),
+    return BlocProvider(
+        create: (_) => sl.get<AuthBloc>(),
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text(''),
           ),
-        ),
-      );
-    });
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 90,
+                              child: CustomTextFormField(
+                                  controller: email, label: "Email"),
+                            ),
+                            SizedBox(
+                              height: 90,
+                              child: CustomTextFormField(
+                                  controller: password, label: "Password"),
+                            ),
+                            verticalSpace(20),
+                            BlocBuilder<AuthBloc, AuthState>(
+                                builder: (context, state) {
+                              if (state is SignInLoading) {
+                                return const CircularProgressIndicator
+                                    .adaptive();
+                              }
+                              if (state is SignInLoadingDone) {
+                                print(state.token);
+                                String role = onNavigate(state.token!);
+                                if (role == 'CUSTOMER') {
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((timeStamp) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const MainScreen()));
+                                  });
+                                }
+                                if (role == 'SELLER') {
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((timeStamp) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const HomeScreen()));
+                                  });
+                                }
+                              }
+                              if (state is SignInLoadingError) {
+                                print(state.error);
+                              }
+                              return CustomElevatedButton(
+                                  label: "Login",
+                                  onTap: () {
+                                    _onSignIn(
+                                        context,
+                                        SignInModel(
+                                            email: email.text,
+                                            password: password.text));
+                                  });
+                            }),
+                            verticalSpace(20),
+                            CustomElevatedButton(
+                              label: "Create Account",
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, RegisterScreen.routeName);
+                              },
+                              backgroundColor: Colors.white,
+                              color: Colors.black,
+                              elevation: 0,
+                            ),
+                          ],
+                        ))
+                  ]),
+            ),
+          ),
+        ));
   }
 
   void _onSignIn(BuildContext context, SignInModel signInModel) {
@@ -104,6 +127,7 @@ class _AuthScreenState extends State<AuthScreen> {
 }
 
 String onNavigate(String token) {
+  print("decoding token");
   String accessToken = jsonDecode(token)['access_token'];
   Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
   final roles = decodedToken['payload']['roles'];

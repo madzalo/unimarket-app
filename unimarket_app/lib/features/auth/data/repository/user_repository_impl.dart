@@ -17,7 +17,7 @@ class UserRepositoryImpl extends UserRepository {
     try {
       final httpResponse = await _userApiService.signin(signInModel);
       if (httpResponse.response.statusCode == HttpStatus.ok) {
-        // print(httpResponse.data);
+        print(httpResponse.data);
         return DataSuccess(httpResponse.data);
       } else {
         print("Response \n \n \n ${httpResponse.response.statusMessage}");
@@ -37,9 +37,12 @@ class UserRepositoryImpl extends UserRepository {
   Future<DataState<String>> signup(SignUpModel signUpModel) async {
     try {
       final httpResponse = await _userApiService.signup(signUpModel);
-      if (httpResponse.response.statusCode == HttpStatus.ok) {
+      // print(httpResponse.response.statusCode);
+      if (httpResponse.response.statusCode == HttpStatus.created) {
+        print(httpResponse.data);
         return DataSuccess(httpResponse.data);
       } else {
+        print("Response \n \n \n ${httpResponse.response.statusMessage}");
         return DataFailed(DioException(
             error: httpResponse.response.statusMessage,
             response: httpResponse.response,
@@ -47,6 +50,7 @@ class UserRepositoryImpl extends UserRepository {
             requestOptions: httpResponse.response.requestOptions));
       }
     } on DioException catch (error) {
+      // print("Error \n \n \n ${error.response!.statusMessage}");
       return DataFailed(error);
     }
   }
