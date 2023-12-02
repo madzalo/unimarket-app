@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unimarket_app/core/common/custom_elevated_button.dart';
 import 'package:unimarket_app/core/common/custom_text_form_field.dart';
 import 'package:unimarket_app/core/common/vertical_space.dart';
@@ -130,6 +131,8 @@ String onNavigate(String token) {
   print("decoding token");
   String accessToken = jsonDecode(token)['access_token'];
   Map<String, dynamic> decodedToken = JwtDecoder.decode(accessToken);
+  shareToken(token);
+  print(decodedToken);
   final roles = decodedToken['payload']['roles'];
   if (roles.contains("CUSTOMER")) {
     return "CUSTOMER";
@@ -139,4 +142,20 @@ String onNavigate(String token) {
   } else {
     return "ADMIN";
   }
+}
+
+void shareToken(String token) async {
+  // SharedPreferences.setMockInitialValues({});
+
+  Map<String, dynamic> data = jsonDecode(token);
+
+  // Access the "access_token" field
+  String accessToken = data['access_token'];
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('token', accessToken);
+  final String? action = prefs.getString('token');
+
+  // Print the access token
+  print('Access Token: $accessToken');
+  print('Access Token From Prefs: $action');
 }

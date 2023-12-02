@@ -39,6 +39,13 @@ dependencies:
   json_annotation: ^4.8.1
   flutter_hooks: ^0.20.3
   jwt_decoder: ^2.0.1
+  dotted_border: ^2.1.0
+  file_picker: ^6.1.1
+  carousel_slider: ^4.2.1
+  cloudinary_public: ^0.23.1
+  path: ^1.8.3
+  http: ^1.1.0
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
