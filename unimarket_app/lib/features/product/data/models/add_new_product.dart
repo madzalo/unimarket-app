@@ -1,8 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+
 class AddNewProductModel {
   final String name;
   final String description;
   final double quantity;
-  final List<String> images;
+  final List<String> imageUrls;
   final String category;
   final double price;
   final String? id;
@@ -11,42 +13,31 @@ class AddNewProductModel {
     required this.name,
     required this.description,
     required this.quantity,
-    required this.images,
+    required this.imageUrls,
     required this.category,
     required this.price,
     this.id,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'description': description,
-      'quantity': quantity,
-      'images': images,
-      'category': category,
-      'price': price,
-      'id': id,
-    };
-  }
-
-  factory AddNewProductModel.fromMap(Map<dynamic, dynamic> map) {
+  factory AddNewProductModel.fromJson(Map<String, dynamic> json) {
     return AddNewProductModel(
-      name: map['name'] ?? '',
-      description: map['description'] ?? '',
-      quantity: map['quantity']?.toDouble() ?? 0.0,
-      images: List<String>.from(map['images']),
-      category: map['category'] ?? '',
-      price: map['price']?.toDouble() ?? 0.0,
-      id: map['_id'],
+      id: json['id'] as String?,
+      name: json['name'] as String,
+      description: json['description'] as String,
+      quantity: (json['quantity'] as num).toDouble(),
+      imageUrls:
+          (json['imageUrls'] as List<dynamic>).map((e) => e as String).toList(),
+      category: json['category'] as String,
+      price: (json['price'] as num).toDouble(),
     );
   }
-
   Map<String, dynamic> toJson() => {
+        // 'id': id,
         'name': name,
         'description': description,
-        'price': price,
         'quantity': quantity,
+        'imageUrls': List<dynamic>.from(imageUrls.map((x) => x)),
         'category': category,
-        'images': (images).map((e) => e),
+        'price': price,
       };
 }

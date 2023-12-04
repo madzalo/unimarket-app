@@ -24,10 +24,10 @@ class CustomElevatedButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         elevation: elevation,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(16),
             side: const BorderSide(color: Colors.black12)),
         backgroundColor: backgroundColor,
-        minimumSize: const Size(double.infinity, 55),
+        minimumSize: const Size(double.infinity, 45),
       ),
       child: isLoading == true
           ? const CircularProgressIndicator.adaptive(

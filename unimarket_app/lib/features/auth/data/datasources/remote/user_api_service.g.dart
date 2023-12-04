@@ -13,7 +13,7 @@ class _UserApiService implements UserApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://localhost:5000/api/v1';
+    baseUrl ??= 'https://unimarket-api.onrender.com/api/v1';
   }
 
   final Dio _dio;

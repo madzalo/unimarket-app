@@ -16,12 +16,15 @@ class MyApp extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'unimarket',
         theme: ThemeData(
-            fontFamily: "Lato",
-            useMaterial3: true,
-            colorScheme:
-                ColorScheme.fromSeed(seedColor: const Color(0xFF022AA4))),
+          fontFamily: "Lato",
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 20, 70, 219),
+            primary: const Color.fromARGB(255, 20, 70, 219),
+          ),
+        ),
         onGenerateRoute: ((settings) => generateRoute(settings)),
         home: const AuthScreen()
 

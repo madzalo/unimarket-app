@@ -20,21 +20,48 @@ class ProductRepositoryImpl extends ProductRepository {
       SellProductModel sellProductModel) async {
     final cloudinary = CloudinaryPublic("dnycfh2tg", "sjvo1hvy");
     List<String> imageUrls = [];
+    print(sellProductModel.category);
+    print(sellProductModel.images);
 
     String? name = sellProductModel.name;
     String? description = sellProductModel.description;
     double? price = sellProductModel.price;
     double? quantity = sellProductModel.quantity;
     String? category = sellProductModel.category;
-    List<String>? images = imageUrls;
+    // List<String>? images = imageUrls;
 
-    for (int i = 0; i < sellProductModel.images.length; i++) {
-      CloudinaryResponse res = await cloudinary.uploadFile(
-          CloudinaryFile.fromFile(sellProductModel.images[i] as String,
-              folder: sellProductModel.name));
-      imageUrls.add(res.secureUrl);
+    // CloudinaryResponse response = await cloudinary.uploadFile(
+    //   CloudinaryFile.fromFile(sellProductModel.images[0].path,
+    //       resourceType: CloudinaryResourceType.Image),
+    // );
+
+    // List<File> file = [File("/unimarket_app/assets/images/shoes_1.png")];
+    // try {
+    //   for (int i = 0; i < file.length; i++) {
+    //     CloudinaryResponse res =
+    //         await cloudinary.uploadFile(CloudinaryFile.fromFile(file[i].path));
+    //     imageUrls.add(res.secureUrl);
+    //   }
+    //   imageUrls.add("/unimarket_app/assets/images/shoes_1.png");
+    //   print("Sell Repo");
+    // } on CloudinaryException catch (e) {
+    //   print(e.message);
+    //   print(e.request);
+    // }
+    try {
+      for (int i = 0; i < sellProductModel.images.length; i++) {
+        CloudinaryResponse res = await cloudinary.uploadFile(
+          CloudinaryFile.fromFile(sellProductModel.images[i].path,
+              resourceType: CloudinaryResourceType.Image,
+              folder: sellProductModel.name),
+        );
+        print(res.secureUrl);
+        imageUrls.add(res.secureUrl);
+      }
+    } on CloudinaryException catch (e) {
+      print(e.message);
+      print(e.request);
     }
-
     try {
       final httpResponse = await _producProductApiService.sellProduct(
           AddNewProductModel(
@@ -43,7 +70,7 @@ class ProductRepositoryImpl extends ProductRepository {
               price: price,
               quantity: quantity,
               category: category,
-              images: images));
+              imageUrls: imageUrls));
       if (httpResponse.response.statusCode == HttpStatus.ok) {
         print(httpResponse.data);
         return DataSuccess(httpResponse.data);

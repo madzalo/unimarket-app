@@ -6,7 +6,7 @@ abstract class ProductEvent {
 }
 
 class SellProduct extends ProductEvent {
-  SellProduct(SellProductModel sellProductModel, String token)
+  SellProduct(SellProductModel sellProductModel)
       : super(sellProductModel: sellProductModel);
 }
 

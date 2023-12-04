@@ -12,6 +12,7 @@ import 'package:unimarket_app/features/auth/presentation/bloc/remote/auth_bloc.d
 import 'package:unimarket_app/features/auth/presentation/bloc/remote/auth_event.dart';
 import 'package:unimarket_app/features/auth/presentation/bloc/remote/auth_state.dart';
 import 'package:unimarket_app/features/auth/presentation/screens/register_screen.dart';
+import 'package:unimarket_app/features/home/logo_widget.dart';
 import 'package:unimarket_app/features/home/main_screen.dart';
 import 'package:unimarket_app/features/seller/seller_main_screen.dart';
 import 'package:unimarket_app/injection_container.dart';
@@ -39,27 +40,29 @@ class _AuthScreenState extends State<AuthScreen> {
           appBar: AppBar(
             title: const Text(''),
           ),
-          body: Center(
+          body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(10.0),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const LogoSvgWidget(),
                     Form(
                         key: _formKey,
                         child: Column(
                           children: [
                             SizedBox(
-                              height: 90,
+                              height: 50,
                               child: CustomTextFormField(
                                   controller: email, label: "Email"),
                             ),
+                            verticalSpace(30),
                             SizedBox(
-                              height: 90,
+                              height: 50,
                               child: CustomTextFormField(
                                   controller: password, label: "Password"),
                             ),
-                            verticalSpace(20),
+                            verticalSpace(30),
                             BlocBuilder<AuthBloc, AuthState>(
                                 builder: (context, state) {
                               if (state is SignInLoading) {
@@ -95,6 +98,9 @@ class _AuthScreenState extends State<AuthScreen> {
                               }
                               return CustomElevatedButton(
                                   label: "Login",
+                                  color: Colors.white,
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 20, 70, 219),
                                   onTap: () {
                                     _onSignIn(
                                         context,
