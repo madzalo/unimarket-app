@@ -1,19 +1,23 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unimarket_app/core/resources/data_state.dart';
+import 'package:unimarket_app/features/product/data/datasources/local/app_database.dart';
 import 'package:unimarket_app/features/product/data/datasources/remote/product_api_service.dart';
 import 'package:unimarket_app/features/product/data/models/add_new_product.dart';
 import 'package:unimarket_app/features/product/data/models/product_model.dart';
 import 'package:unimarket_app/features/product/data/models/sell_product_model.dart';
+import 'package:unimarket_app/features/product/domain/entities/product_entity.dart';
 import 'package:unimarket_app/features/product/domain/repository/product_repository.dart';
 
 class ProductRepositoryImpl extends ProductRepository {
   final ProductApiService _producProductApiService;
+  final AppDatabase _appDatabase;
 
-  ProductRepositoryImpl(this._producProductApiService);
+  ProductRepositoryImpl(this._producProductApiService, this._appDatabase);
 
   @override
   Future<DataState<String>> sellProduct(
@@ -28,26 +32,7 @@ class ProductRepositoryImpl extends ProductRepository {
     double? price = sellProductModel.price;
     double? quantity = sellProductModel.quantity;
     String? category = sellProductModel.category;
-    // List<String>? images = imageUrls;
 
-    // CloudinaryResponse response = await cloudinary.uploadFile(
-    //   CloudinaryFile.fromFile(sellProductModel.images[0].path,
-    //       resourceType: CloudinaryResourceType.Image),
-    // );
-
-    // List<File> file = [File("/unimarket_app/assets/images/shoes_1.png")];
-    // try {
-    //   for (int i = 0; i < file.length; i++) {
-    //     CloudinaryResponse res =
-    //         await cloudinary.uploadFile(CloudinaryFile.fromFile(file[i].path));
-    //     imageUrls.add(res.secureUrl);
-    //   }
-    //   imageUrls.add("/unimarket_app/assets/images/shoes_1.png");
-    //   print("Sell Repo");
-    // } on CloudinaryException catch (e) {
-    //   print(e.message);
-    //   print(e.request);
-    // }
     try {
       for (int i = 0; i < sellProductModel.images.length; i++) {
         CloudinaryResponse res = await cloudinary.uploadFile(
@@ -112,5 +97,16 @@ class ProductRepositoryImpl extends ProductRepository {
       print("Error \n \n \n ${error.response!.statusMessage}");
       return DataFailed(error);
     }
+  }
+
+  @override
+  Future<List<ProductModel>> getSavedProducts() async {
+    return _appDatabase.productDao.getProducts();
+  }
+
+  @override
+  Future<void> saveProduct(ProductEntity product) {
+    return _appDatabase.productDao
+        .insertProduct(ProductModel.fromEntity(product));
   }
 }

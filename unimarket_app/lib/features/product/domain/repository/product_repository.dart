@@ -5,6 +5,10 @@ import 'package:unimarket_app/features/product/domain/entities/product_entity.da
 abstract class ProductRepository {
   Future<DataState<List<ProductEntity>>> getProducts();
 
+  Future<List<ProductEntity>> getSavedProducts();
+
+  Future<void> saveProduct(ProductEntity product);
+
   Future<DataState<String>> sellProduct(
     SellProductModel sellProductModel,
   );

@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unimarket_app/core/common/custom_elevated_button.dart';
 import 'package:unimarket_app/core/common/vertical_space.dart';
 import 'package:unimarket_app/features/product/domain/entities/product_entity.dart';
+import 'package:unimarket_app/features/product/presentation/bloc/local/local_product_bloc.dart';
+import 'package:unimarket_app/features/product/presentation/bloc/local/local_product_event.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   static const routeName = "/product-datails-screen";
@@ -35,12 +38,12 @@ class ProductDetailsScreen extends StatelessWidget {
                         return Stack(
                           children: [
                             Container(
-                              height: MediaQuery.of(context).size.height * 35,
+                              height: MediaQuery.of(context).size.height * 30,
                               width: MediaQuery.of(context).size.width,
                               color: Colors.grey.shade300,
                               child: CachedNetworkImage(
                                 fit: BoxFit.contain,
-                                imageUrl: product.images![0],
+                                imageUrl: product.image!,
                               ),
                             ),
                             Positioned(
@@ -140,12 +143,17 @@ class ProductDetailsScreen extends StatelessWidget {
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                             verticalSpace(40),
-                            CustomElevatedButton(
-                                color: Colors.white,
-                                backgroundColor:
-                                    const Color.fromARGB(255, 20, 70, 219),
-                                label: "Add To Cart",
-                                onTap: () {})
+                            Align(
+                                alignment: Alignment.bottomCenter,
+                                child: CustomElevatedButton(
+                                    color: Colors.white,
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 20, 70, 219),
+                                    label: "Add To Cart",
+                                    onTap: () {
+                                      print("adding to card");
+                                      _onAddToCart(context);
+                                    }))
                           ],
                         ),
                       ),
@@ -156,6 +164,16 @@ class ProductDetailsScreen extends StatelessWidget {
             )),
           )
         ],
+      ),
+    );
+  }
+
+  void _onAddToCart(BuildContext context) {
+    BlocProvider.of<LocalProductBloc>(context).add(SaveProduct(product));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        backgroundColor: Colors.black,
+        content: Text('Article saved successfully.'),
       ),
     );
   }

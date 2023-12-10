@@ -4,6 +4,7 @@ import 'package:unimarket_app/features/auth/presentation/screens/auth_screen.dar
 import 'package:unimarket_app/injection_container.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await initializeDependencies();
   runApp(const MyApp());
 }

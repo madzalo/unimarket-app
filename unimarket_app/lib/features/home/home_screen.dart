@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (context, index) {
                           final product = state.products![index];
                           print(product);
-                          print(product.images);
+                          print(product.image);
                           return GestureDetector(
                               onTap: () {
                                 Navigator.push(

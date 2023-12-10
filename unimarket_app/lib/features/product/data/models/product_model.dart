@@ -1,14 +1,14 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:floor/floor.dart';
 import 'package:unimarket_app/features/product/domain/entities/product_entity.dart';
 
-@JsonSerializable()
+@Entity(tableName: 'product', primaryKeys: ['id'])
 class ProductModel extends ProductEntity {
   const ProductModel({
     final String? id,
     final String? name,
     final String? description,
     final double? quantity,
-    final List<String>? images,
+    final String? image,
     final String? category,
     final double? price,
     final String? userId,
@@ -17,7 +17,7 @@ class ProductModel extends ProductEntity {
             name: name,
             description: description,
             quantity: quantity,
-            images: images,
+            image: image,
             category: category,
             price: price,
             userId: userId);
@@ -28,9 +28,7 @@ class ProductModel extends ProductEntity {
       name: json['name'] as String?,
       description: json['description'] as String?,
       quantity: (json['quantity'] as num?)?.toDouble(),
-      images: (json['imageUrls'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+      image: json['imageUrls'][0] as String?,
       category: json['category'] as String?,
       price: (json['price'] as num?)?.toDouble(),
       userId: json['userId'] as String?,
@@ -43,7 +41,7 @@ class ProductModel extends ProductEntity {
       name: entity.name,
       description: entity.description,
       quantity: entity.quantity,
-      images: entity.images,
+      image: entity.image,
       category: entity.category,
       price: entity.price,
       userId: entity.userId,

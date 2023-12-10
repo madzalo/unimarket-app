@@ -36,8 +36,8 @@ class ProductWidget extends StatelessWidget {
                 Container(
                   height: MediaQuery.of(context).size.width * 0.23,
                   decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(product.images![0]))),
+                      image:
+                          DecorationImage(image: NetworkImage(product.image!))),
                 ),
                 Positioned(
                   right: 5,
